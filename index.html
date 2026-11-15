@@ -29,6 +29,8 @@ html,body{margin:0;height:100%;background:#3B2E2A;font-family:-apple-system,Blin
 .pat i{display:block;height:100%;background:#4CAF7A;border-radius:3px}
 .empty{position:absolute;inset:0;border:2px dashed #D9C3A9;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#C9B195;font-size:12px}
 #stage{flex:1;min-height:0;display:flex;align-items:flex-end;justify-content:center;gap:10px;position:relative;padding:0 10px}
+#bg{position:absolute;inset:0;width:100%;height:100%}
+#jWrap,#cupWrap{position:relative;z-index:1}
 #jWrap{height:100%;width:180px;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-top:6px}
 #jiyoon{width:100%;flex:1;min-height:0;max-height:207px}
 #say{position:relative;flex:none;height:42px;max-width:100%;display:flex;align-items:center;justify-content:center;text-align:center;background:#FFFDF8;border:2px solid #3B2E2A;border-radius:12px;padding:0 10px;margin-bottom:9px;font-size:12px;line-height:1.3;word-break:keep-all}
@@ -36,7 +38,7 @@ html,body{margin:0;height:100%;background:#3B2E2A;font-family:-apple-system,Blin
 #cupWrap{display:flex;flex-direction:column;align-items:center;padding-bottom:10px}
 #cup{width:74px;height:104px;border:3px solid #8B6F5A;border-top:none;border-radius:4px 4px 16px 16px;background:#FFFDF8;display:flex;flex-direction:column-reverse;overflow:hidden;clip-path:polygon(0 0,100% 0,90% 100%,10% 100%)}
 #cup div{flex:none;height:25%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;animation:pour .2s}
-#cupLabel{font-size:11px;margin-top:4px;color:#8B6F5A;height:14px}
+#cupLabel{font-size:11px;margin-top:4px;color:#3B2E2A;background:rgba(255,253,248,.9);border-radius:8px;padding:2px 8px;white-space:nowrap}
 #counter{height:10px;background:#8B6248;flex:none}
 #pad{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:8px 8px calc(10px + env(safe-area-inset-bottom));background:#A57B5B;flex:none}
 #pad button{border:none;border-radius:12px;height:62px;font-size:13px;font-weight:700;color:#3B2E2A;background:#FFFDF8;box-shadow:0 3px 0 #6f4f39;font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
@@ -75,6 +77,25 @@ html,body{margin:0;height:100%;background:#3B2E2A;font-family:-apple-system,Blin
   <div id="bar"><div id="barIn"></div></div>
   <div id="queue"><div class="slot"></div><div class="slot"></div><div class="slot"></div></div>
   <div id="stage">
+<svg id="bg" viewBox="0 0 480 260" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+<rect width="480" height="260" fill="#F3E7D3"/>
+<rect width="480" height="26" fill="#EADDC8"/><line x1="0" y1="10" x2="480" y2="10" stroke="#CFC3AE" stroke-width="2"/><g transform="translate(60,0)"><line x1="0" y1="10" x2="0" y2="18" stroke="#CFC3AE" stroke-width="2"/><path d="M-7 18 L7 18 L10 32 L-10 32Z" fill="#FFFDF8" stroke="#D9CDB8"/><ellipse cx="0" cy="32" rx="9" ry="2.5" fill="#FFF3B8"/></g><g transform="translate(170,0)"><line x1="0" y1="10" x2="0" y2="18" stroke="#CFC3AE" stroke-width="2"/><path d="M-7 18 L7 18 L10 32 L-10 32Z" fill="#FFFDF8" stroke="#D9CDB8"/><ellipse cx="0" cy="32" rx="9" ry="2.5" fill="#FFF3B8"/></g><g transform="translate(280,0)"><line x1="0" y1="10" x2="0" y2="18" stroke="#CFC3AE" stroke-width="2"/><path d="M-7 18 L7 18 L10 32 L-10 32Z" fill="#FFFDF8" stroke="#D9CDB8"/><ellipse cx="0" cy="32" rx="9" ry="2.5" fill="#FFF3B8"/></g><g transform="translate(400,0)"><line x1="0" y1="10" x2="0" y2="18" stroke="#CFC3AE" stroke-width="2"/><path d="M-7 18 L7 18 L10 32 L-10 32Z" fill="#FFFDF8" stroke="#D9CDB8"/><ellipse cx="0" cy="32" rx="9" ry="2.5" fill="#FFF3B8"/></g>
+<rect x="16" y="46" width="300" height="162" rx="38" fill="#FBE596"/>
+<rect x="22" y="52" width="288" height="156" rx="32" fill="#F6C431"/>
+<g stroke="#E3AE17" stroke-width="2"><line x1="150" y1="64" x2="150" y2="196"/><line x1="156" y1="64" x2="156" y2="196"/><line x1="162" y1="64" x2="162" y2="196"/><line x1="168" y1="64" x2="168" y2="196"/><line x1="174" y1="64" x2="174" y2="196"/><line x1="180" y1="64" x2="180" y2="196"/><line x1="262" y1="64" x2="262" y2="196"/><line x1="268" y1="64" x2="268" y2="196"/><line x1="274" y1="64" x2="274" y2="196"/><line x1="280" y1="64" x2="280" y2="196"/><line x1="286" y1="64" x2="286" y2="196"/></g>
+<path d="M40 96 L62 80 L84 96 L106 80 L128 96" fill="none" stroke="#FFFDF8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<text x="84" y="124" text-anchor="middle" font-size="15" font-style="italic" font-weight="700" fill="#FFFDF8">오늘도 화이팅!</text>
+<g transform="translate(222,92)"><path d="M-16 0 L16 0 L12 40 L-12 40Z" fill="#FFFDF8"/><rect x="-19" y="-7" width="38" height="8" rx="3" fill="#FFFDF8"/><path d="M0 14 C-8 6 -14 16 0 28 C14 16 8 6 0 14Z" fill="#F6C431"/></g>
+<rect x="330" y="26" width="150" height="208" fill="#FBF8F1"/>
+<g stroke="#EFE8DA" stroke-width="1"><line x1="344" y1="26" x2="344" y2="234"/><line x1="356" y1="26" x2="356" y2="234"/><line x1="368" y1="26" x2="368" y2="234"/><line x1="380" y1="26" x2="380" y2="234"/><line x1="392" y1="26" x2="392" y2="234"/><line x1="404" y1="26" x2="404" y2="234"/><line x1="416" y1="26" x2="416" y2="234"/><line x1="428" y1="26" x2="428" y2="234"/><line x1="440" y1="26" x2="440" y2="234"/><line x1="452" y1="26" x2="452" y2="234"/><line x1="464" y1="26" x2="464" y2="234"/><line x1="476" y1="26" x2="476" y2="234"/></g>
+<g fill="#D9A968"><rect x="398" y="82" width="6" height="20" rx="1"/><rect x="410" y="34" width="6" height="20" rx="1"/><rect x="350" y="58" width="6" height="20" rx="1"/><rect x="398" y="34" width="6" height="20" rx="1"/><rect x="434" y="106" width="6" height="20" rx="1"/><rect x="338" y="58" width="6" height="20" rx="1"/><rect x="410" y="178" width="6" height="20" rx="1"/><rect x="350" y="106" width="6" height="20" rx="1"/><rect x="350" y="178" width="6" height="20" rx="1"/><rect x="338" y="58" width="6" height="20" rx="1"/><rect x="374" y="34" width="6" height="20" rx="1"/><rect x="446" y="178" width="6" height="20" rx="1"/><rect x="338" y="106" width="6" height="20" rx="1"/><rect x="338" y="82" width="6" height="20" rx="1"/><rect x="386" y="178" width="6" height="20" rx="1"/><rect x="362" y="58" width="6" height="20" rx="1"/><rect x="446" y="130" width="6" height="20" rx="1"/><rect x="434" y="82" width="6" height="20" rx="1"/><rect x="350" y="106" width="6" height="20" rx="1"/><rect x="398" y="58" width="6" height="20" rx="1"/><rect x="434" y="58" width="6" height="20" rx="1"/><rect x="446" y="34" width="6" height="20" rx="1"/><rect x="446" y="106" width="6" height="20" rx="1"/><rect x="422" y="178" width="6" height="20" rx="1"/><rect x="398" y="202" width="6" height="20" rx="1"/><rect x="446" y="202" width="6" height="20" rx="1"/></g>
+<rect x="352" y="84" width="106" height="52" rx="8" fill="#FBF8F1"/>
+<text x="405" y="107" text-anchor="middle" font-size="17" font-weight="900" fill="#F6C431" stroke="#E3AE17" stroke-width=".6">지윤 카페</text>
+<path d="M392 118 Q405 130 418 118" fill="none" stroke="#F6C431" stroke-width="4" stroke-linecap="round"/>
+<rect x="0" y="198" width="330" height="26" rx="6" fill="#F5922B"/><rect x="0" y="218" width="330" height="16" fill="#E57F1C"/>
+<rect x="0" y="234" width="480" height="26" fill="#DDD3C2"/>
+<g transform="translate(456,214)"><rect x="-9" y="8" width="18" height="18" rx="3" fill="#FBF8F1" stroke="#D9CDB8"/><ellipse cx="-8" cy="-2" rx="10" ry="14" fill="#5E9B4C" transform="rotate(-25)"/><ellipse cx="8" cy="-4" rx="10" ry="15" fill="#6FAE5A" transform="rotate(25)"/><ellipse cx="0" cy="-14" rx="9" ry="14" fill="#4F8A40"/></g>
+</svg>
     <div id="jWrap">
     <div id="say">어서오세요~!</div>
     <svg id="jiyoon" viewBox="0 0 200 230" preserveAspectRatio="xMidYMax meet" aria-label="지윤이">
