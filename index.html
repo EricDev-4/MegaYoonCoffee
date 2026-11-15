@@ -29,8 +29,10 @@ html,body{margin:0;height:100%;background:#3B2E2A;font-family:-apple-system,Blin
 .pat i{display:block;height:100%;background:#4CAF7A;border-radius:3px}
 .empty{position:absolute;inset:0;border:2px dashed #D9C3A9;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#C9B195;font-size:12px}
 #stage{flex:1;min-height:0;display:flex;align-items:flex-end;justify-content:center;gap:10px;position:relative;padding:0 10px}
-#jiyoon{height:100%;max-height:230px;aspect-ratio:200/230;flex:none}
-#say{position:absolute;left:10px;top:10px;max-width:46%;background:#FFFDF8;border:2px solid #3B2E2A;border-radius:12px;padding:6px 9px;font-size:12px;line-height:1.3;word-break:keep-all}
+#jWrap{height:100%;width:180px;flex:none;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-top:6px}
+#jiyoon{width:100%;flex:1;min-height:0;max-height:207px}
+#say{position:relative;flex:none;height:42px;max-width:100%;display:flex;align-items:center;justify-content:center;text-align:center;background:#FFFDF8;border:2px solid #3B2E2A;border-radius:12px;padding:0 10px;margin-bottom:9px;font-size:12px;line-height:1.3;word-break:keep-all}
+#say::after{content:'';position:absolute;left:50%;bottom:-8px;width:12px;height:12px;margin-left:-6px;background:#FFFDF8;border-right:2px solid #3B2E2A;border-bottom:2px solid #3B2E2A;transform:rotate(45deg)}
 #cupWrap{display:flex;flex-direction:column;align-items:center;padding-bottom:10px}
 #cup{width:74px;height:104px;border:3px solid #8B6F5A;border-top:none;border-radius:4px 4px 16px 16px;background:#FFFDF8;display:flex;flex-direction:column-reverse;overflow:hidden;clip-path:polygon(0 0,100% 0,90% 100%,10% 100%)}
 #cup div{flex:none;height:25%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;animation:pour .2s}
@@ -73,8 +75,9 @@ html,body{margin:0;height:100%;background:#3B2E2A;font-family:-apple-system,Blin
   <div id="bar"><div id="barIn"></div></div>
   <div id="queue"><div class="slot"></div><div class="slot"></div><div class="slot"></div></div>
   <div id="stage">
+    <div id="jWrap">
     <div id="say">어서오세요~!</div>
-    <svg id="jiyoon" viewBox="0 0 200 230" aria-label="지윤이">
+    <svg id="jiyoon" viewBox="0 0 200 230" preserveAspectRatio="xMidYMax meet" aria-label="지윤이">
       <path d="M40 230 Q40 150 75 132 L125 132 Q160 150 160 230Z" fill="#2E2E2E"/>
       <path d="M68 160 L132 160 L138 230 L62 230Z" fill="#E8736A"/>
       <rect x="82" y="178" width="36" height="22" rx="4" fill="#C9564E"/>
@@ -108,6 +111,7 @@ html,body{margin:0;height:100%;background:#3B2E2A;font-family:-apple-system,Blin
         <path d="M152 36 Q162 52 154 60 Q144 54 152 36Z M40 44 Q32 58 39 65 Q48 59 40 44Z" fill="#7FB8E6"/>
       </g>
     </svg>
+    </div>
     <div id="cupWrap"><div id="cup"></div><div id="cupLabel">빈 컵</div></div>
   </div>
   <div id="counter"></div>
