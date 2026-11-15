@@ -157,9 +157,10 @@ var MENU=[
 var LINES=[
  ['어서오세요~!','오늘도 화이팅!','주문 도와드릴게요!'],
  ['네, 금방 드릴게요~','아직 괜찮아...','점심은 언제 먹지?'],
- ['다리가 아파온다...','아아... 또 아아...','퇴근까지 몇 시간이지'],
- ['...주문하신 음료...','집에 가고 싶다','나오셨습니다아아...']
+ ['아웅..ㅠㅠ 유냥이 햄드러..ㅠㅠ','차냥아..모해.,,?','차냥이유냥이거래~~','다리가 아파온다...'],
+ ['아웅..ㅠㅠ 유냥이 햄드러..ㅠㅠ','차냥아..모해.,,?','차냥이유냥이거래~~','집에 가고 싶다...']
 ];
+var TIRED=['아웅..ㅠㅠ 유냥이 햄드러..ㅠㅠ','차냥아..모해.,,?','차냥이유냥이거래~~'];
 var SKIN=['#F7DCC6','#EFC9A8','#F3D5BC','#E8BE9C'],HAIR=['#2B2B2B','#5A3A29','#8B5E3C','#3D3D5C','#7A7A7A'],SHIRT=['#7FB8E6','#F2A65A','#9ED6A8','#C7A5E6','#F3C7C2','#B0B7C3'];
 var HOUR=18,HOURS=10,MAXHP=3;
 var $=function(id){return document.getElementById(id)};
@@ -278,7 +279,7 @@ function serve(c){
   }else{
     S.combo=0;floatText(c.el,'이거 아닌데요?','#D9534F');
     c.el.classList.remove('bad');void c.el.offsetWidth;c.el.classList.add('bad');
-    clearCup(false);say('앗, 죄송합니다...!');hurt();
+    clearCup(false);say(rnd(TIRED));S.sayIn=5;hurt();
   }
   renderHud();
 }
@@ -308,6 +309,8 @@ function tick(now){
   $('clock').textContent=hh+':'+(mm<10?'0':'')+mm;
   $('barIn').style.width=Math.min(100,S.t/total*100)+'%';
   if(S.t>=total){end(true);return}
+  S.sayIn-=dt;
+  if(S.sayIn<=0){S.sayIn=4+Math.random()*3;if(S.hour>=4||S.hp<MAXHP)say(rnd(TIRED))}
   S.spawnIn-=dt;
   if(S.spawnIn<=0){spawn();S.spawnIn=Math.max(1.9,4.6-S.hour*0.3)*(0.8+Math.random()*0.4)}
   for(var i=0;i<3;i++){
@@ -316,7 +319,7 @@ function tick(now){
     bar.style.width=r*100+'%';bar.style.background=r>0.5?'#4CAF7A':r>0.25?'#F2A65A':'#D9534F';
     if(r<0.25&&!c.angry){c.angry=true;c.el.querySelector('.mouth').setAttribute('d','M16 25 Q20 22 24 25')}
     if(c.pat<=0){
-      S.combo=0;floatText(c.el,'너무 늦네요!','#D9534F');removeCust(c,'ok');hurt();
+      S.combo=0;floatText(c.el,'너무 늦네요!','#D9534F');removeCust(c,'ok');say(rnd(TIRED));S.sayIn=5;hurt();
       if(S.over)return;
     }
   }
@@ -324,7 +327,7 @@ function tick(now){
 }
 function start(){
   cancelAnimationFrame(raf);
-  S={t:0,hour:0,hp:MAXHP,sales:0,tips:0,cups:0,combo:0,maxCombo:0,cup:[],custs:[null,null,null],spawnIn:0.8,over:false};
+  S={t:0,hour:0,hp:MAXHP,sales:0,tips:0,cups:0,combo:0,maxCombo:0,cup:[],custs:[null,null,null],spawnIn:0.8,sayIn:5,over:false};
   slots.forEach(function(s){s.innerHTML='<div class="empty">빈 자리</div>'});
   $('startScr').classList.add('hidden');$('endScr').classList.add('hidden');
   renderHud();renderCup();renderFace();say('어서오세요~!');banner('10:00 출근!');
