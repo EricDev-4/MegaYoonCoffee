@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#F6EBDD">
+<title>지윤이의 카페 알바 10시간</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
+html,body{margin:0;height:100%;background:#3B2E2A;font-family:-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;color:#3B2E2A;overscroll-behavior:none;touch-action:manipulation}
+#app{position:relative;max-width:480px;height:100%;height:100dvh;margin:0 auto;background:#F6EBDD;display:flex;flex-direction:column;overflow:hidden}
+#hud{display:flex;align-items:center;justify-content:space-between;padding:calc(8px + env(safe-area-inset-top)) 12px 8px;background:#3B2E2A;color:#F6EBDD;font-weight:700;font-size:15px}
+#hud .small{font-size:11px;font-weight:400;opacity:.75;display:block}
+#hearts{letter-spacing:2px;font-size:16px}
+#bar{height:6px;background:#5a4841}
+#barIn{height:100%;width:0;background:#F2A65A}
+#queue{display:flex;gap:6px;padding:8px 8px 0;height:150px;flex:none}
+.slot{flex:1;border-radius:12px;position:relative;min-width:0}
+.cust{position:absolute;inset:0;background:#FFFDF8;border:2px solid #D9C3A9;border-radius:12px;padding:6px 4px 4px;display:flex;flex-direction:column;align-items:center;cursor:pointer;animation:pop .25s}
+.cust:active{transform:scale(.97)}
+.cust.ok{animation:bye .4s forwards;border-color:#4CAF7A}
+.cust.bad{animation:shake .4s;border-color:#D9534F}
+.cust .face{width:40px;height:40px;flex:none}
+.cust .name{font-size:13px;font-weight:700;margin-top:2px;text-align:center;line-height:1.15;word-break:keep-all}
+.chips{display:flex;flex-wrap:wrap;gap:2px;justify-content:center;margin-top:3px}
+.chip{font-size:11px;padding:1px 5px;border-radius:8px;background:#EFE2D0;white-space:nowrap}
+.chip.done{background:#BFE3CB}
+.pat{position:absolute;left:6px;right:6px;bottom:5px;height:6px;border-radius:3px;background:#EFE2D0;overflow:hidden}
+.pat i{display:block;height:100%;background:#4CAF7A;border-radius:3px}
+.empty{position:absolute;inset:0;border:2px dashed #D9C3A9;border-radius:12px;display:flex;align-items:center;justify-content:center;color:#C9B195;font-size:12px}
+#stage{flex:1;min-height:0;display:flex;align-items:flex-end;justify-content:center;gap:10px;position:relative;padding:0 10px}
+#jiyoon{height:100%;max-height:230px;aspect-ratio:200/230;flex:none}
+#say{position:absolute;left:10px;top:10px;max-width:46%;background:#FFFDF8;border:2px solid #3B2E2A;border-radius:12px;padding:6px 9px;font-size:12px;line-height:1.3;word-break:keep-all}
+#cupWrap{display:flex;flex-direction:column;align-items:center;padding-bottom:10px}
+#cup{width:74px;height:104px;border:3px solid #8B6F5A;border-top:none;border-radius:4px 4px 16px 16px;background:#FFFDF8;display:flex;flex-direction:column-reverse;overflow:hidden;clip-path:polygon(0 0,100% 0,90% 100%,10% 100%)}
+#cup div{flex:none;height:25%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;animation:pour .2s}
+#cupLabel{font-size:11px;margin-top:4px;color:#8B6F5A;height:14px}
+#counter{height:10px;background:#8B6248;flex:none}
+#pad{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:8px 8px calc(10px + env(safe-area-inset-bottom));background:#A57B5B;flex:none}
+#pad button{border:none;border-radius:12px;height:62px;font-size:13px;font-weight:700;color:#3B2E2A;background:#FFFDF8;box-shadow:0 3px 0 #6f4f39;font-family:inherit;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px}
+#pad button span{font-size:22px;line-height:1}
+#pad button:active{transform:translateY(3px);box-shadow:none}
+#pad button.on{background:#BFE3CB}
+#pad button.trash{background:#F3C7C2}
+.float{position:absolute;font-weight:800;font-size:16px;pointer-events:none;animation:up 1s forwards;z-index:5;white-space:nowrap;text-shadow:0 1px 0 #fff}
+.overlay{position:absolute;inset:0;background:rgba(59,46,42,.88);z-index:10;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{background:#F6EBDD;border-radius:18px;padding:22px 20px;width:100%;max-width:340px;text-align:center}
+.card h1{font-size:22px;margin:0 0 6px}
+.card p{font-size:14px;line-height:1.55;margin:6px 0;word-break:keep-all}
+.card table{width:100%;font-size:14px;margin:10px 0;border-collapse:collapse}
+.card td{padding:5px 2px;border-bottom:1px solid #E1CDB3}
+.card td:last-child{text-align:right;font-weight:700}
+.btn{display:block;width:100%;border:none;border-radius:14px;padding:14px;margin-top:14px;font-size:17px;font-weight:800;background:#E8736A;color:#fff;box-shadow:0 4px 0 #B7504A;font-family:inherit}
+.btn:active{transform:translateY(4px);box-shadow:none}
+.hidden{display:none}
+#hourBanner{position:absolute;left:0;right:0;top:38%;text-align:center;font-size:26px;font-weight:900;color:#fff;background:rgba(59,46,42,.8);padding:10px 0;z-index:6;pointer-events:none;opacity:0}
+#hourBanner.show{animation:banner 1.6s}
+@keyframes pop{from{transform:scale(.6);opacity:0}}
+@keyframes bye{to{transform:translateY(-30px);opacity:0}}
+@keyframes shake{25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-4px)}}
+@keyframes up{to{transform:translateY(-50px);opacity:0}}
+@keyframes pour{from{height:0}}
+@keyframes banner{0%{opacity:0;transform:scale(.9)}15%,75%{opacity:1;transform:scale(1)}100%{opacity:0}}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="hud">
+    <div><span class="small">현재 시각</span><span id="clock">10:00</span></div>
+    <div style="text-align:center"><span class="small">매출 + 팁</span><span id="money">0원</span></div>
+    <div style="text-align:right"><span class="small">멘탈</span><span id="hearts"></span></div>
+  </div>
+  <div id="bar"><div id="barIn"></div></div>
+  <div id="queue"><div class="slot"></div><div class="slot"></div><div class="slot"></div></div>
+  <div id="stage">
+    <div id="say">어서오세요~!</div>
+    <svg id="jiyoon" viewBox="0 0 200 230" aria-label="지윤이">
+      <path d="M40 230 Q40 150 75 132 L125 132 Q160 150 160 230Z" fill="#2E2E2E"/>
+      <path d="M68 160 L132 160 L138 230 L62 230Z" fill="#E8736A"/>
+      <rect x="82" y="178" width="36" height="22" rx="4" fill="#C9564E"/>
+      <path d="M78 134 L72 162 M122 134 L128 162" stroke="#E8736A" stroke-width="5"/>
+      <rect x="88" y="118" width="24" height="20" fill="#F2D2BB"/>
+      <ellipse cx="100" cy="72" rx="58" ry="60" fill="#1F1B1B"/>
+      <path d="M46 70 Q38 130 56 156 L64 90Z M154 70 Q162 130 144 156 L136 90Z" fill="#1F1B1B"/>
+      <ellipse cx="100" cy="84" rx="46" ry="46" fill="#F7DCC6"/>
+      <path d="M52 66 Q62 24 100 26 Q138 24 148 66 L138 58 L127 68 L116 56 L102 70 L90 56 L78 68 L66 56Z" fill="#1F1B1B"/>
+      <ellipse cx="70" cy="104" rx="8" ry="4" fill="#F2A7A7" opacity=".75"/>
+      <ellipse cx="130" cy="104" rx="8" ry="4" fill="#F2A7A7" opacity=".75"/>
+      <g id="f0">
+        <ellipse cx="80" cy="88" rx="6" ry="8" fill="#3B2E2A"/><ellipse cx="120" cy="88" rx="6" ry="8" fill="#3B2E2A"/>
+        <circle cx="82" cy="85" r="2" fill="#fff"/><circle cx="122" cy="85" r="2" fill="#fff"/>
+        <path d="M90 108 Q100 118 110 108" fill="none" stroke="#3B2E2A" stroke-width="2.5" stroke-linecap="round"/>
+      </g>
+      <g id="f1" class="hidden">
+        <ellipse cx="80" cy="90" rx="6" ry="5" fill="#3B2E2A"/><ellipse cx="120" cy="90" rx="6" ry="5" fill="#3B2E2A"/>
+        <path d="M72 84 L88 84 M112 84 L128 84" stroke="#3B2E2A" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M92 111 L108 111" stroke="#3B2E2A" stroke-width="2.5" stroke-linecap="round"/>
+      </g>
+      <g id="f2" class="hidden">
+        <path d="M72 90 Q80 86 88 90 M112 90 Q120 86 128 90" fill="none" stroke="#3B2E2A" stroke-width="3" stroke-linecap="round"/>
+        <path d="M73 98 Q80 102 87 98 M113 98 Q120 102 127 98" fill="none" stroke="#B58C8C" stroke-width="1.5"/>
+        <path d="M92 113 Q100 109 108 113" fill="none" stroke="#3B2E2A" stroke-width="2.5" stroke-linecap="round"/>
+        <path d="M152 36 Q162 52 154 60 Q144 54 152 36Z" fill="#7FB8E6"/>
+      </g>
+      <g id="f3" class="hidden">
+        <path d="M73 86 L87 94 M87 86 L73 94 M113 86 L127 94 M127 86 L113 94" stroke="#3B2E2A" stroke-width="2.5" stroke-linecap="round"/>
+        <ellipse cx="100" cy="113" rx="6" ry="5" fill="#3B2E2A"/>
+        <path d="M152 36 Q162 52 154 60 Q144 54 152 36Z M40 44 Q32 58 39 65 Q48 59 40 44Z" fill="#7FB8E6"/>
+      </g>
+    </svg>
+    <div id="cupWrap"><div id="cup"></div><div id="cupLabel">빈 컵</div></div>
+  </div>
+  <div id="counter"></div>
+  <div id="pad"></div>
+  <div id="hourBanner"></div>
+
+  <div class="overlay" id="startScr">
+    <div class="card">
+      <h1>지윤이의 카페 알바</h1>
+      <p style="font-weight:700;color:#E8736A">10:00 출근 → 20:00 퇴근</p>
+      <p>손님 말풍선에 적힌 재료를 눌러 컵에 담고,<br><b>손님을 터치</b>해서 음료를 건네주세요.</p>
+      <p>잘못 건네거나 손님이 기다리다 가버리면 멘탈이 깎여요. 멘탈 3개가 다 사라지면 조기 퇴근!</p>
+      <p id="bestLine" style="font-size:13px;color:#8B6F5A"></p>
+      <button class="btn" id="startBtn">출근하기</button>
+    </div>
+  </div>
+  <div class="overlay hidden" id="endScr">
+    <div class="card">
+      <h1 id="endTitle"></h1>
+      <p id="endSub"></p>
+      <table>
+        <tr><td>만든 음료</td><td id="rCups"></td></tr>
+        <tr><td>매출</td><td id="rSales"></td></tr>
+        <tr><td>받은 팁</td><td id="rTips"></td></tr>
+        <tr><td>최고 콤보</td><td id="rCombo"></td></tr>
+        <tr><td>오늘의 칭호</td><td id="rRank"></td></tr>
+      </table>
+      <p id="rBest" style="font-size:13px;color:#8B6F5A"></p>
+      <button class="btn" id="againBtn">내일도 출근하기</button>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+var ING={ice:{n:'얼음',e:'🧊',c:'#9CCBEA'},water:{n:'물',e:'💧',c:'#6FA8DC'},shot:{n:'샷',e:'☕',c:'#5A3A29'},milk:{n:'우유',e:'🥛',c:'#D8C7B0'},choco:{n:'초코',e:'🍫',c:'#7B4A2E'},berry:{n:'딸기',e:'🍓',c:'#E36A7E'},vanilla:{n:'바닐라',e:'🍦',c:'#E3B95A'}};
+var ORDER=['ice','water','shot','milk','choco','berry','vanilla'];
+var MENU=[
+ {n:'아이스 아메리카노',r:['ice','water','shot'],p:2000,h:0},
+ {n:'따뜻한 아메리카노',r:['water','shot'],p:1500,h:0},
+ {n:'카페라떼',r:['milk','shot'],p:2700,h:1},
+ {n:'아이스 라떼',r:['ice','milk','shot'],p:2900,h:2},
+ {n:'초코라떼',r:['milk','choco'],p:3000,h:3},
+ {n:'딸기스무디',r:['ice','berry','milk'],p:3500,h:4},
+ {n:'바닐라라떼',r:['ice','milk','shot','vanilla'],p:3400,h:5},
+ {n:'카페모카',r:['milk','shot','choco'],p:3500,h:7}
+];
+var LINES=[
+ ['어서오세요~!','오늘도 화이팅!','주문 도와드릴게요!'],
+ ['네, 금방 드릴게요~','아직 괜찮아...','점심은 언제 먹지?'],
+ ['다리가 아파온다...','아아... 또 아아...','퇴근까지 몇 시간이지'],
+ ['...주문하신 음료...','집에 가고 싶다','나오셨습니다아아...']
+];
+var SKIN=['#F7DCC6','#EFC9A8','#F3D5BC','#E8BE9C'],HAIR=['#2B2B2B','#5A3A29','#8B5E3C','#3D3D5C','#7A7A7A'],SHIRT=['#7FB8E6','#F2A65A','#9ED6A8','#C7A5E6','#F3C7C2','#B0B7C3'];
+var HOUR=18,HOURS=10,MAXHP=3;
+var $=function(id){return document.getElementById(id)};
+var slots=[].slice.call(document.querySelectorAll('.slot'));
+var S=null,last=0,raf=0,actx=null;
+
+function won(n){return n.toLocaleString('ko-KR')+'원'}
+function rnd(a){return a[Math.floor(Math.random()*a.length)]}
+function beep(f,d,type,v){
+  try{
+    if(!actx)actx=new (window.AudioContext||window.webkitAudioContext)();
+    var o=actx.createOscillator(),g=actx.createGain();
+    o.type=type||'sine';o.frequency.value=f;g.gain.value=v||0.06;
+    g.gain.exponentialRampToValueAtTime(0.0001,actx.currentTime+d);
+    o.connect(g);g.connect(actx.destination);o.start();o.stop(actx.currentTime+d);
+  }catch(e){}
+}
+function getBest(){try{return +localStorage.getItem('jiyoonCafeBest')||0}catch(e){return 0}}
+function setBest(v){try{localStorage.setItem('jiyoonCafeBest',v)}catch(e){}}
+
+function buildPad(){
+  var pad=$('pad');pad.innerHTML='';
+  ORDER.forEach(function(k){
+    var b=document.createElement('button');b.dataset.k=k;
+    b.innerHTML='<span>'+ING[k].e+'</span>'+ING[k].n;
+    b.addEventListener('pointerdown',function(ev){ev.preventDefault();addIng(k)});
+    pad.appendChild(b);
+  });
+  var t=document.createElement('button');t.className='trash';
+  t.innerHTML='<span>🗑️</span>버리기';
+  t.addEventListener('pointerdown',function(ev){ev.preventDefault();clearCup(true)});
+  pad.appendChild(t);
+}
+function addIng(k){
+  if(!S||S.over)return;
+  if(S.cup.indexOf(k)>=0||S.cup.length>=4)return;
+  S.cup.push(k);beep(520+S.cup.length*60,0.08,'triangle');renderCup();
+}
+function clearCup(sound){
+  if(!S)return;S.cup=[];if(sound)beep(180,0.12,'sawtooth',0.04);renderCup();
+}
+function renderCup(){
+  var c=$('cup');c.innerHTML='';
+  S.cup.forEach(function(k){
+    var d=document.createElement('div');d.style.background=ING[k].c;d.textContent=ING[k].n;c.appendChild(d);
+  });
+  [].forEach.call($('pad').children,function(b){if(b.dataset.k)b.classList.toggle('on',S.cup.indexOf(b.dataset.k)>=0)});
+  var m=matchMenu(S.cup);
+  $('cupLabel').textContent=S.cup.length?(m?m.n:'제조 중...'):'빈 컵';
+  S.custs.forEach(function(c){if(c)paintChips(c)});
+}
+function same(a,b){
+  if(a.length!==b.length)return false;
+  for(var i=0;i<a.length;i++)if(b.indexOf(a[i])<0)return false;
+  return true;
+}
+function matchMenu(cup){for(var i=0;i<MENU.length;i++)if(same(MENU[i].r,cup))return MENU[i];return null}
+
+function faceSvg(){
+  var s=rnd(SKIN),h=rnd(HAIR),t=rnd(SHIRT),long=Math.random()<0.5;
+  return '<svg class="face" viewBox="0 0 40 40">'+
+   '<path d="M6 40 Q6 30 20 30 Q34 30 34 40Z" fill="'+t+'"/>'+
+   (long?'<path d="M7 16 Q5 30 10 33 L30 33 Q35 30 33 16Z" fill="'+h+'"/>':'')+
+   '<circle cx="20" cy="17" r="12" fill="'+s+'"/>'+
+   '<path d="M8 15 Q9 4 20 4 Q31 4 32 15 Q26 9 20 10 Q14 9 8 15Z" fill="'+h+'"/>'+
+   '<circle cx="15.5" cy="18" r="1.6" fill="#3B2E2A"/><circle cx="24.5" cy="18" r="1.6" fill="#3B2E2A"/>'+
+   '<path class="mouth" d="M16 23 Q20 26 24 23" fill="none" stroke="#3B2E2A" stroke-width="1.4" stroke-linecap="round"/></svg>';
+}
+function spawn(){
+  var free=[];S.custs.forEach(function(c,i){if(!c)free.push(i)});
+  if(!free.length)return;
+  var i=rnd(free),h=S.hour;
+  var pool=MENU.filter(function(m){return m.h<=h});
+  var m=rnd(pool),pat=Math.max(7.5,15-h*0.75);
+  var el=document.createElement('div');el.className='cust';
+  el.innerHTML=faceSvg()+'<div class="name">'+m.n+'</div><div class="chips"></div><div class="pat"><i></i></div>';
+  var c={m:m,pat:pat,max:pat,el:el,i:i,gone:false};
+  el.addEventListener('pointerdown',function(ev){ev.preventDefault();serve(c)});
+  slots[i].innerHTML='';slots[i].appendChild(el);
+  S.custs[i]=c;paintChips(c);beep(880,0.07,'sine',0.03);
+}
+function paintChips(c){
+  var box=c.el.querySelector('.chips');
+  box.innerHTML=c.m.r.map(function(k){
+    return '<span class="chip'+(S.cup.indexOf(k)>=0?' done':'')+'">'+ING[k].e+ING[k].n+'</span>';
+  }).join('');
+}
+function floatText(el,txt,color){
+  var a=$('app').getBoundingClientRect(),r=el.getBoundingClientRect();
+  var f=document.createElement('div');f.className='float';f.textContent=txt;f.style.color=color;
+  f.style.left=Math.max(4,r.left-a.left+r.width/2-40)+'px';f.style.top=(r.top-a.top+20)+'px';
+  $('app').appendChild(f);setTimeout(function(){f.remove()},1000);
+}
+function removeCust(c,cls){
+  c.gone=true;S.custs[c.i]=null;
+  if(cls){c.el.classList.remove('bad');void c.el.offsetWidth;c.el.classList.add(cls)}
+  var slot=slots[c.i],el=c.el;
+  setTimeout(function(){if(el.parentNode===slot)slot.innerHTML='<div class="empty">빈 자리</div>'},400);
+}
+function hurt(){
+  S.hp--;renderHud();beep(140,0.25,'square',0.05);
+  if(navigator.vibrate)try{navigator.vibrate(80)}catch(e){}
+  if(S.hp<=0)end(false);
+}
+function serve(c){
+  if(!S||S.over||c.gone)return;
+  if(!S.cup.length){say('컵이 비었어요...!');return}
+  if(same(c.m.r,S.cup)){
+    var ratio=c.pat/c.max,tip=Math.round(ratio*800/100)*100;
+    S.combo++;if(S.combo>S.maxCombo)S.maxCombo=S.combo;
+    var bonus=S.combo>=3?Math.min(S.combo,10)*100:0;
+    S.sales+=c.m.p;S.tips+=tip+bonus;S.cups++;
+    floatText(c.el,'+'+won(c.m.p+tip+bonus)+(S.combo>=3?' '+S.combo+'콤보!':''),'#2E8B57');
+    beep(660,0.09,'triangle');setTimeout(function(){beep(990,0.12,'triangle')},90);
+    removeCust(c,'ok');clearCup(false);say(rnd(LINES[mood()]));
+  }else{
+    S.combo=0;floatText(c.el,'이거 아닌데요?','#D9534F');
+    c.el.classList.remove('bad');void c.el.offsetWidth;c.el.classList.add('bad');
+    clearCup(false);say('앗, 죄송합니다...!');hurt();
+  }
+  renderHud();
+}
+function mood(){var h=S.hour;return h<3?0:h<6?1:h<9?2:3}
+function say(t){$('say').textContent=t}
+function renderFace(){
+  var m=mood();for(var i=0;i<4;i++)$('f'+i).classList.toggle('hidden',i!==m);
+}
+function renderHud(){
+  var hp='';for(var i=0;i<MAXHP;i++)hp+=i<S.hp?'❤️':'🤍';
+  $('hearts').textContent=hp;$('money').textContent=won(S.sales+S.tips);
+}
+function banner(t){var b=$('hourBanner');b.textContent=t;b.classList.remove('show');void b.offsetWidth;b.classList.add('show')}
+
+function tick(now){
+  if(!S||S.over)return;
+  var dt=Math.min(0.1,(now-last)/1000);last=now;
+  S.t+=dt;
+  var total=HOUR*HOURS,h=Math.min(HOURS-1,Math.floor(S.t/HOUR));
+  if(h!==S.hour){
+    S.hour=h;renderFace();say(rnd(LINES[mood()]));
+    banner(h===HOURS-1?'마지막 1시간!':(h+1)+'시간째 근무 중');
+    var nm=MENU.filter(function(m){return m.h===h});
+    if(nm.length)setTimeout(function(){if(S&&!S.over)banner('신메뉴: '+nm[0].n)},1700);
+  }
+  var mins=Math.floor(S.t/HOUR*60),hh=10+Math.floor(mins/60),mm=Math.floor(mins%60/10)*10;
+  $('clock').textContent=hh+':'+(mm<10?'0':'')+mm;
+  $('barIn').style.width=Math.min(100,S.t/total*100)+'%';
+  if(S.t>=total){end(true);return}
+  S.spawnIn-=dt;
+  if(S.spawnIn<=0){spawn();S.spawnIn=Math.max(1.9,4.6-S.hour*0.3)*(0.8+Math.random()*0.4)}
+  for(var i=0;i<3;i++){
+    var c=S.custs[i];if(!c)continue;
+    c.pat-=dt;var r=Math.max(0,c.pat/c.max),bar=c.el.querySelector('.pat i');
+    bar.style.width=r*100+'%';bar.style.background=r>0.5?'#4CAF7A':r>0.25?'#F2A65A':'#D9534F';
+    if(r<0.25&&!c.angry){c.angry=true;c.el.querySelector('.mouth').setAttribute('d','M16 25 Q20 22 24 25')}
+    if(c.pat<=0){
+      S.combo=0;floatText(c.el,'너무 늦네요!','#D9534F');removeCust(c,'ok');hurt();
+      if(S.over)return;
+    }
+  }
+  raf=requestAnimationFrame(tick);
+}
+function start(){
+  cancelAnimationFrame(raf);
+  S={t:0,hour:0,hp:MAXHP,sales:0,tips:0,cups:0,combo:0,maxCombo:0,cup:[],custs:[null,null,null],spawnIn:0.8,over:false};
+  slots.forEach(function(s){s.innerHTML='<div class="empty">빈 자리</div>'});
+  $('startScr').classList.add('hidden');$('endScr').classList.add('hidden');
+  renderHud();renderCup();renderFace();say('어서오세요~!');banner('10:00 출근!');
+  $('clock').textContent='10:00';$('barIn').style.width='0';
+  last=performance.now();raf=requestAnimationFrame(tick);
+}
+function end(done){
+  S.over=true;cancelAnimationFrame(raf);
+  var total=S.sales+S.tips,best=getBest(),isBest=total>best;
+  if(isBest)setBest(total);
+  var worked=Math.min(HOURS,Math.floor(S.t/HOUR));
+  $('endTitle').textContent=done?'퇴근이다!!':'조기 퇴근...';
+  $('endSub').textContent=done?'10시간을 버텨냈어요. 지윤이 수고했어!':worked+'시간 만에 멘탈이 바닥났어요. 오늘은 여기까지...';
+  $('rCups').textContent=S.cups+'잔';$('rSales').textContent=won(S.sales);$('rTips').textContent=won(S.tips);
+  $('rCombo').textContent=S.maxCombo+'콤보';
+  var rank=!done?(worked<3?'수습 알바생':'눈물의 알바생'):total>=260000?'전설의 바리스타':total>=200000?'에이스 알바생':total>=140000?'믿음직한 알바생':'성실한 알바생';
+  $('rRank').textContent=rank;
+  $('rBest').textContent=isBest?'최고 기록 갱신! '+won(total):'최고 기록 '+won(best);
+  if(done){beep(523,0.15,'triangle');setTimeout(function(){beep(659,0.15,'triangle')},150);setTimeout(function(){beep(784,0.3,'triangle')},300)}
+  setTimeout(function(){$('endScr').classList.remove('hidden')},500);
+}
+document.addEventListener('visibilitychange',function(){last=performance.now()});
+document.addEventListener('contextmenu',function(e){e.preventDefault()});
+buildPad();
+slots.forEach(function(s){s.innerHTML='<div class="empty">빈 자리</div>'});
+var b=getBest();if(b)$('bestLine').textContent='최고 기록 '+won(b);
+$('startBtn').addEventListener('click',start);
+$('againBtn').addEventListener('click',start);
+})();
+</script>
+</body>
+</html>
